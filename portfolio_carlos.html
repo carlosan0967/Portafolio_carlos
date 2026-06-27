@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carlos Lindarte — Desarrollador Fullstack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0D1B2A;
+    --navy2:  #112233;
+    --panel:  #0F2235;
+    --cyan:   #00D4FF;
+    --green:  #39FF14;
+    --white:  #F0F4F8;
+    --muted:  #7A93AC;
+    --border: #1E3A52;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background: rgba(13,27,42,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--cyan);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .nav-logo span { color: var(--green); }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--cyan); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative; z-index: 1;
+    max-width: 860px; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .hero-text {}
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.2rem;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--cyan);
+  }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 380px;
+    margin-bottom: 2rem;
+  }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary {
+    background: var(--cyan);
+    color: var(--navy);
+  }
+  .btn-primary:hover { background: #33ddff; transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--cyan);
+    border: 1px solid var(--cyan);
+  }
+  .btn-ghost:hover { background: rgba(0,212,255,0.08); transform: translateY(-1px); }
+
+  /* TERMINAL */
+  .terminal {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,212,255,0.05);
+  }
+  .terminal-bar {
+    background: #1a2d3f;
+    padding: 0.65rem 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #FF5F57; }
+  .dot-y { background: #FEBC2E; }
+  .dot-g { background: #28C840; }
+  .terminal-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-left: auto; margin-right: auto;
+  }
+  .terminal-body {
+    padding: 1.2rem 1.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.8;
+    min-height: 220px;
+  }
+  .t-prompt { color: var(--green); }
+  .t-cmd { color: var(--white); }
+  .t-key { color: var(--cyan); }
+  .t-val { color: #FFB86C; }
+  .t-str { color: #F1FA8C; }
+  .t-comment { color: var(--muted); }
+  .cursor {
+    display: inline-block;
+    width: 8px; height: 1em;
+    background: var(--cyan);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 860px; margin: 0 auto; }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--green);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 2.5rem;
+    position: relative;
+    display: inline-block;
+  }
+  h2::after {
+    content: '';
+    display: block;
+    height: 3px;
+    width: 40px;
+    background: var(--cyan);
+    margin-top: 0.5rem;
+    border-radius: 2px;
+  }
+
+  /* ABOUT */
+  #about .about-grid {
+    display: grid; grid-template-columns: 3fr 2fr; gap: 3rem; align-items: start;
+  }
+  .about-text { color: var(--muted); font-size: 1rem; line-height: 1.75; }
+  .about-text strong { color: var(--white); font-weight: 600; }
+  .about-facts { display: flex; flex-direction: column; gap: 1rem; }
+  .fact {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .fact-icon { font-size: 1.2rem; }
+  .fact-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.1rem; }
+  .fact-value { font-size: 0.9rem; font-weight: 600; color: var(--white); }
+
+  /* SKILLS */
+  #skills { background: var(--panel); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+  .skill-pill {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--white);
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .skill-pill:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    transform: translateY(-2px);
+  }
+  .skill-pill .s-icon { font-size: 1.3rem; display: block; margin-bottom: 0.3rem; }
+
+  /* COMPETENCIES */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .comp-tag {
+    background: rgba(0,212,255,0.06);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+    color: var(--cyan);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.8rem;
+    transition: border-color 0.25s, transform 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--green));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .project-card:hover { border-color: var(--cyan); transform: translateY(-3px); }
+  .project-card:hover::before { opacity: 1; }
+  .project-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .project-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--white);
+  }
+  .project-card p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 1.2rem;
+  }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .stack-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    background: rgba(0,212,255,0.08);
+    color: var(--cyan);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+  }
+
+  /* EDUCATION */
+  .edu-timeline { display: flex; flex-direction: column; gap: 1.5rem; }
+  .edu-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.2rem;
+    align-items: start;
+  }
+  .edu-dot-col { display: flex; flex-direction: column; align-items: center; padding-top: 0.3rem; }
+  .edu-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--cyan);
+    border: 2px solid var(--navy);
+    box-shadow: 0 0 0 3px rgba(0,212,255,0.2);
+    flex-shrink: 0;
+  }
+  .edu-line { width: 2px; flex: 1; background: var(--border); margin-top: 0.5rem; min-height: 40px; }
+  .edu-content {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 0;
+  }
+  .edu-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--green);
+    margin-bottom: 0.3rem;
+  }
+  .edu-degree { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.2rem; }
+  .edu-school { font-size: 0.85rem; color: var(--muted); }
+
+  /* CONTACT */
+  #contact { background: var(--panel); border-top: 1px solid var(--border); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+  }
+  .contact-text p { color: var(--muted); margin-top: 0.75rem; line-height: 1.7; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    text-decoration: none;
+    color: var(--white);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .contact-link:hover { border-color: var(--cyan); transform: translateX(4px); }
+  .contact-link-icon { font-size: 1.3rem; }
+  .contact-link-label { font-size: 0.75rem; color: var(--muted); }
+  .contact-link-val { font-size: 0.9rem; font-weight: 600; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  footer span { color: var(--cyan); }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    #about .about-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span>~/</span>carlosan0967</div>
+  <ul>
+    <li><a href="#about">Sobre mí</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Proyectos</a></li>
+    <li><a href="#education">Educación</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow">// Disponible para trabajar</p>
+      <h1>Carlos<br><em>Lindarte</em><br>Manrique</h1>
+      <p class="hero-sub">Desarrollador Fullstack Junior — construyendo interfaces web con lógica y diseño desde Bucaramanga, Colombia 🇨🇴</p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary">Ver proyectos</a>
+        <a href="#contact" class="btn btn-ghost">Contáctame</a>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="terminal-title">carlos_dev.py</span>
+      </div>
+      <div class="terminal-body" id="terminal-body">
+        <div><span class="t-comment"># Perfil del desarrollador</span></div>
+        <div><span class="t-key">dev</span> = {</div>
+        <div id="t-lines"></div>
+        <div><span class="t-prompt">❯ </span><span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label">// 01 — Sobre mí</p>
+    <h2>Quién soy</h2>
+    <div class="about-grid">
+      <p class="about-text">
+        Soy un <strong>desarrollador de software junior en formación</strong> con pasión por construir aplicaciones web funcionales y bien diseñadas. Tengo experiencia básica en tecnologías como <strong>Python, HTML, CSS, JavaScript y MySQL</strong>, y me caracterizan el <strong>aprendizaje constante</strong>, el pensamiento lógico y la resolución de problemas.<br><br>
+        Actualmente formo parte del programa <strong>Técnico en Programación Avanzada</strong> de Campuslands, donde amplío mis competencias en frontend, backend y bases de datos. Me interesa seguir creciendo como profesional y contribuir a proyectos tecnológicos con impacto real.
+      </p>
+      <div class="about-facts">
+        <div class="fact">
+          <span class="fact-icon">📍</span>
+          <div>
+            <div class="fact-label">Ubicación</div>
+            <div class="fact-value">Bucaramanga, Colombia</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">🏫</span>
+          <div>
+            <div class="fact-label">Formación actual</div>
+            <div class="fact-value">Campuslands, Girón</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">🌐</span>
+          <div>
+            <div class="fact-label">Idiomas</div>
+            <div class="fact-value">Español C2 · Inglés B1</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">⚡</span>
+          <div>
+            <div class="fact-label">Intereses</div>
+            <div class="fact-value">Código, esports, música</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <p class="section-label">// 02 — Tecnologías</p>
+    <h2>Stack & Herramientas</h2>
+    <div class="skills-grid">
+      <div class="skill-pill"><span class="s-icon">🐍</span>Python</div>
+      <div class="skill-pill"><span class="s-icon">🌐</span>JavaScript</div>
+      <div class="skill-pill"><span class="s-icon">⚡</span>Vue.js</div>
+      <div class="skill-pill"><span class="s-icon">🅰️</span>Angular</div>
+      <div class="skill-pill"><span class="s-icon">🌿</span>Node.js</div>
+      <div class="skill-pill"><span class="s-icon">🛤️</span>Express</div>
+      <div class="skill-pill"><span class="s-icon">🎨</span>HTML & CSS</div>
+      <div class="skill-pill"><span class="s-icon">💨</span>Tailwind</div>
+      <div class="skill-pill"><span class="s-icon">🗄️</span>MySQL</div>
+      <div class="skill-pill"><span class="s-icon">🍃</span>MongoDB</div>
+      <div class="skill-pill"><span class="s-icon">🐘</span>PostgreSQL</div>
+      <div class="skill-pill"><span class="s-icon">🔧</span>Git</div>
+      <div class="skill-pill"><span class="s-icon">🐳</span>Docker</div>
+      <div class="skill-pill"><span class="s-icon">☕</span>Java</div>
+      <div class="skill-pill"><span class="s-icon">🌱</span>Spring</div>
+      <div class="skill-pill"><span class="s-icon">🎨</span>Figma</div>
+    </div>
+
+    <div style="margin-top:3rem;">
+      <p class="section-label">// Competencias blandas</p>
+      <div class="comp-grid">
+        <div class="comp-tag">Liderazgo</div>
+        <div class="comp-tag">Creatividad</div>
+        <div class="comp-tag">Empatía</div>
+        <div class="comp-tag">Disciplina</div>
+        <div class="comp-tag">Paciencia</div>
+        <div class="comp-tag">Proactividad</div>
+        <div class="comp-tag">Comunicación</div>
+        <div class="comp-tag">Adaptabilidad</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <p class="section-label">// 03 — Proyectos</p>
+    <h2>Lo que he construido</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <span class="project-tag">Python · CLI</span>
+        <h3>Simulador de Gasto Diario</h3>
+        <p>Aplicación de consola desarrollada en Python para registrar, administrar y analizar gastos diarios. Los datos se almacenan de forma persistente en un archivo JSON, permitiendo seguimiento real del presupuesto personal.</p>
+        <div class="project-stack">
+          <span class="stack-badge">Python</span>
+          <span class="stack-badge">JSON</span>
+          <span class="stack-badge">CLI</span>
+          <span class="stack-badge">File I/O</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <span class="project-tag">HTML · CSS · Web</span>
+        <h3>Music Store App</h3>
+        <p>Interfaz web para una plataforma de música tipo streaming. Implementa navegación, biblioteca musical y diseño responsive enfocado en mejorar la experiencia del usuario, construida con HTML y CSS puros.</p>
+        <div class="project-stack">
+          <span class="stack-badge">HTML5</span>
+          <span class="stack-badge">CSS3</span>
+          <span class="stack-badge">Responsive Design</span>
+          <span class="stack-badge">UI/UX</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:2rem; text-align:center;">
+      <a href="https://github.com/carlosan0967" target="_blank" class="btn btn-ghost">Ver más en GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-inner">
+    <p class="section-label">// 04 — Formación</p>
+    <h2>Educación</h2>
+    <div class="edu-timeline">
+      <div class="edu-item">
+        <div class="edu-dot-col">
+          <div class="edu-dot"></div>
+          <div class="edu-line"></div>
+        </div>
+        <div class="edu-content">
+          <div class="edu-date">Dic 2025 – Nov 2026</div>
+          <div class="edu-degree">Técnico en Programación Avanzada</div>
+          <div class="edu-school">Campuslands · Girón, Santander</div>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-dot-col">
+          <div class="edu-dot" style="background:var(--green); box-shadow:0 0 0 3px rgba(57,255,20,0.2);"></div>
+        </div>
+        <div class="edu-content">
+          <div class="edu-date">2025</div>
+          <div class="edu-degree">Bachiller Académico</div>
+          <div class="edu-school">Colegio Instituto Santa Teresita</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <p class="section-label">// 05 — Contacto</p>
+    <h2>Hablemos</h2>
+    <div class="contact-grid">
+      <div class="contact-text">
+        <p>Estoy abierto a oportunidades, colaboraciones y proyectos interesantes. Si tienes algo en mente, no dudes en escribirme.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:carloslindarte694@gmail.com" class="contact-link">
+          <span class="contact-link-icon">📧</span>
+          <div>
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-val">carloslindarte694@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://github.com/carlosan0967" target="_blank" class="contact-link">
+          <span class="contact-link-icon">💻</span>
+          <div>
+            <div class="contact-link-label">GitHub</div>
+            <div class="contact-link-val">github.com/carlosan0967</div>
+          </div>
+        </a>
+        <a href="https://instagram.com/lindarte862" target="_blank" class="contact-link">
+          <span class="contact-link-icon">📸</span>
+          <div>
+            <div class="contact-link-label">Instagram</div>
+            <div class="contact-link-val">@lindarte862</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Hecho con <span>❤️</span> por <span>Carlos Lindarte</span> · 2025</p>
+</footer>
+
+<script>
+  // Terminal typing animation
+  const lines = [
+    { key: '  "nombre"', val: '"Carlos Andres Lindarte"' },
+    { key: '  "rol"',    val: '"Fullstack Developer Jr."' },
+    { key: '  "stack"',  val: '["Python","JS","Vue","MySQL"]' },
+    { key: '  "ciudad"', val: '"Bucaramanga, CO 🇨🇴"' },
+    { key: '  "status"', val: '"buscando oportunidades"' },
+  ];
+
+  const container = document.getElementById('t-lines');
+  let i = 0;
+
+  function addLine(line, callback) {
+    const el = document.createElement('div');
+    el.innerHTML = `<span class="t-key">${line.key}</span>: <span class="t-str">${line.val}</span>,`;
+    el.style.opacity = '0';
+    container.appendChild(el);
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.3s';
+      el.style.opacity = '1';
+      if (callback) setTimeout(callback, 280);
+    }, 50);
+  }
+
+  function runTerminal() {
+    if (i < lines.length) {
+      addLine(lines[i], () => { i++; runTerminal(); });
+    }
+  }
+
+  setTimeout(runTerminal, 800);
+</script>
+</body>
+</html>
